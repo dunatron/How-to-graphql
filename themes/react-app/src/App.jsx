@@ -5,10 +5,10 @@ import WebpackLogo from './img/webpack.svg';
 import SSLogo from './img/silverstripe-logo.png';
 import GraphQLLogo from './img/GraphQL_Logo.svg.png';
 import Header from './components/Header';
-import EventList from './pages/EventList';
 import { withStyles } from 'material-ui/styles';
-import LinkList from './components/LinkList';
 import CreateLink from './components/CreateLink';
+import LinkList from './components/LinkList';
+import { Switch, Route } from 'react-router-dom';
 
 const styles = {
   cardHolder: {
@@ -43,7 +43,10 @@ class App extends Component {
 
         <Header />
         <div className={classes.cardHolder}>
-          <LinkList />
+          <Switch>
+            <Route exact path='/' component={LinkList} />
+            <Route exact path='/create' component={CreateLink} />
+          </Switch>
         </div>
       </div>
     )

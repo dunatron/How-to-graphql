@@ -27,6 +27,7 @@ class CreateLink extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: '',
       description: '',
       url: ''
     };
@@ -46,6 +47,16 @@ class CreateLink extends Component {
     return (
       <div>
         <div className='flex flex-column mt3'>
+          <TextField
+            id="CreateLink_title"
+            label="title"
+            className={classes.createLinkTextFields}
+            value={this.state.title}
+            onChange={(e) => this.setState({title: e.target.value})}
+            type='text'
+            placeholder='A description for the link'
+            margin="normal"
+          />
           <TextField
             id="CreateLink_description"
             label="description"
@@ -77,26 +88,30 @@ class CreateLink extends Component {
 
   _createLink = async () => {
     console.log('I want to create a new link');
-    const {description, url} = this.state;
+    const { title, description, url } = this.state;
     await this.props.createLinkMutation({
       variables: {
+        title,
         description,
         url
       }
     })
+    this.props.history.push(`/`)
   }
 
 }
 
 const CREATE_LINK_MUTATION = gql`
   # 2
-  mutation CreateLinkMutation($description: String, $url: String) {
+  mutation CreateLinkMutation($title: String, $description: String, $url: String) {
     createLink(Input: {
+      Title: $title
       description: $description,
       url: $url
     }) {
     	ID,
     	Created,
+    	Title,
     	url,
     	description
     }

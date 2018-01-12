@@ -38,10 +38,6 @@ Change it, enhance it and most importantly enjoy it!
 <div id="react-root">
 
 </div>
-
-
     $Layout
-
-
 </body>
 </html>

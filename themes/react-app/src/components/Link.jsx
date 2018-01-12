@@ -12,6 +12,7 @@ class Link extends Component {
     console.log(this.props);
     return (
       <div>
+        <div>{this.props.link.Title}</div>
         <div>{this.props.link.description} ({this.props.link.url})</div>
       </div>
     )

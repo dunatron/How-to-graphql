@@ -43,7 +43,7 @@ class Header extends Component {
               Hacker News
             </Typography>
             <Link to='/' className={classes.flex} >New </Link>
-            <CreateLink />
+            <Link to='/create' className={classes.flex} >Create </Link>
             <Button color="contrast">Login</Button>
           </Toolbar>
         </AppBar>
