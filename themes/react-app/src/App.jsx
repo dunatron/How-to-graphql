@@ -43,7 +43,6 @@ class App extends Component {
 
         <Header />
         <div className={classes.cardHolder}>
-          <CreateLink />
           <LinkList />
         </div>
       </div>

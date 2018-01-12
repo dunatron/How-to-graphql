@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import { graphql, gql, compose } from 'react-apollo'
 import {Link} from 'react-router-dom';
-import {withRouter} from 'react-router'
+import {withRouter} from 'react-router';
+import CreateLink from './CreateLink';
 // Material UI
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
@@ -42,6 +43,7 @@ class Header extends Component {
               Hacker News
             </Typography>
             <Link to='/' className={classes.flex} >New </Link>
+            <CreateLink />
             <Button color="contrast">Login</Button>
           </Toolbar>
         </AppBar>

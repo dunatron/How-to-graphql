@@ -39,7 +39,6 @@ Change it, enhance it and most importantly enjoy it!
 
 </div>
 
-<h1 style="text-align: center;">A react APP with ss4</h1>
 
     $Layout
 
