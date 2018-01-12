@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
+import { graphql, gql, compose } from 'react-apollo'
 import { AUTH_TOKEN } from '../constants'
 
 class Login extends Component {
 
   state = {
     login: true, // switch between Login and SignUp
-    email: '',
-    password: '',
-    name: ''
+    FirstName: '',
+    Email: '',
+    Password: ''
   };
 
   render() {
@@ -18,20 +19,20 @@ class Login extends Component {
         <div className='flex flex-column'>
           {!this.state.login &&
           <input
-            value={this.state.name}
-            onChange={(e) => this.setState({ name: e.target.value })}
+            value={this.state.FirstName}
+            onChange={(e) => this.setState({ FirstName: e.target.value })}
             type='text'
             placeholder='Your name'
           />}
           <input
-            value={this.state.email}
-            onChange={(e) => this.setState({ email: e.target.value })}
+            value={this.state.Email}
+            onChange={(e) => this.setState({ Email: e.target.value })}
             type='text'
             placeholder='Your email address'
           />
           <input
-            value={this.state.password}
-            onChange={(e) => this.setState({ password: e.target.value })}
+            value={this.state.Password}
+            onChange={(e) => this.setState({ Password: e.target.value })}
             type='password'
             placeholder='Choose a safe password'
           />
@@ -55,8 +56,33 @@ class Login extends Component {
   }
 
   _confirm = async () => {
-    // ... you'll implement this in a bit
-  }
+    const { FirstName, Email, Password } = this.state;
+    if (this.state.login) {
+      const result = await this.props.loginMutation({
+        variables: {
+          Email,
+          Password,
+        },
+      });
+      const { user, token } = result.data.login;
+      this._saveUserData(user.id, token)
+    } else {
+      const result = await this.props.signupMutation({
+        variables: {
+          FirstName,
+          Email,
+          Password,
+        },
+      });
+      console.log('hmmmm sign me up plaese');
+      console.log(result.data.createMember);
+      const { Member, token } = result.data.createMember;
+      console.log('Member data');
+      console.log(Member);
+      this._saveUserData(result.data.createMember.ID, token)
+    }
+    this.props.history.push(`/`)
+  };
 
   _saveUserData = (token) => {
     localStorage.setItem(AUTH_TOKEN, token)
@@ -64,4 +90,43 @@ class Login extends Component {
 
 }
 
-export default Login
+// const SIGNUP_MUTATION = gql`
+//   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
+//     signup(email: $email, password: $password, name: $name) {
+//       user {
+//         id
+//       }
+//       token
+//     }
+//   }
+// `;
+
+const SIGNUP_MUTATION = gql`
+  mutation newUser( $FirstName: String, $Email: String) {
+  createMember(Input: {
+    FirstName: $FirstName,
+    Email: $Email,
+  }) {
+    ID
+    Name
+    FirstName
+    Email
+  }
+}
+`;
+
+const LOGIN_MUTATION = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      user {
+        id
+      }
+      token
+    }
+  }
+`;
+
+export default compose(
+  graphql(SIGNUP_MUTATION, { name: 'signupMutation' }),
+  graphql(LOGIN_MUTATION, { name: 'loginMutation' }),
+)(Login)

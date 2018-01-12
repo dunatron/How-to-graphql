@@ -6,6 +6,7 @@ import App from './App';
 import GraphQLConfig from './config/GraphQLConfig';
 import {Switch, Route} from 'react-router-dom'
 import {BrowserRouter} from 'react-router-dom'
+import { AUTH_TOKEN } from './constants'
 
 /**
  * Get GraphQL endpoint
@@ -29,6 +30,17 @@ const networkInterface = createNetworkInterface({
   uri: GRAPHQL_ENDPOINT
 });
 
+networkInterface.use([{
+  applyMiddleware(req, next) {
+    if (!req.options.headers) {
+      req.options.headers = {}
+    }
+    const token = localStorage.getItem(AUTH_TOKEN)
+    req.options.headers.authorization = token ? `Bearer ${token}` : null
+    next()
+  }
+}]);
+
 /**
  * configure apollo client to use for ApolloProvider component
  * @type {ApolloClient | ApolloClient<any>}
@@ -36,6 +48,7 @@ const networkInterface = createNetworkInterface({
 const client = new ApolloClient({
   networkInterface: networkInterface
 });
+
 
 /**
  * Render our app at given element

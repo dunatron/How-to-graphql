@@ -39,4 +39,10 @@ class EventOwner extends DataExtension
             ->setConfig(GridFieldConfig_RelationEditor::create());
         $fields->addFieldToTab('Root.Friends', $friendField);
     }
+
+    public function canCreate($member = null, $context = array())
+    {
+        return true;
+    }
+
 }

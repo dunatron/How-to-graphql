@@ -6,6 +6,7 @@ import SSLogo from './img/silverstripe-logo.png';
 import GraphQLLogo from './img/GraphQL_Logo.svg.png';
 import Header from './components/Header';
 import { withStyles } from 'material-ui/styles';
+import Login from './components/Login';
 import CreateLink from './components/CreateLink';
 import LinkList from './components/LinkList';
 import { Switch, Route } from 'react-router-dom';
@@ -46,6 +47,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={LinkList} />
             <Route exact path='/create' component={CreateLink} />
+            <Route exact path='/login' component={Login} />
           </Switch>
         </div>
       </div>

@@ -1,6 +1,7 @@
 <?php
 namespace MyOrg\Model;
 
+use SilverStripe\GraphQL\Scaffolding\Interfaces\ScaffoldingProvider;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
 use SilverStripe\Security\Member;
@@ -40,4 +41,6 @@ class Link extends DataObject
 //        return Permission::check('ADMIN', 'any', $member);
         return true;
     }
+
+
 }
