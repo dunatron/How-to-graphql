@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import logo from './img/logo.svg';
+import ReactLogo from './img/logo.svg';
 import './App.css';
 import WebpackLogo from './img/webpack.svg';
 import SSLogo from './img/silverstripe-logo.png';
+import GraphQLLogo from './img/GraphQL_Logo.svg.png';
+import Header from './components/Header';
 import EventList from './pages/EventList';
 import { withStyles } from 'material-ui/styles';
 import LinkList from './components/LinkList';
@@ -20,6 +22,9 @@ const styles = {
     'flex-wrap': 'wrap',
     'flex-flow': 'row wrap',
     'align-content': 'flex-end'
+  },
+  webpackLogo: {
+    'marginLeft': '30px'
   }
 };
 
@@ -30,15 +35,13 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={SSLogo} className="ss-logo" alt="logo" />
-          <img src={logo} className="App-logo" alt="logo" />
-          <img src={WebpackLogo} className="App-logo" alt="logo" />
+          <img src={SSLogo} className="ss-logo" alt="SilverStripe logo" />
+          <img src={ReactLogo} className="App-logo" alt="React logo" />
+          <img src={GraphQLLogo} className="App-logo" alt="graphQL logo" />
+          <img src={WebpackLogo} className="App-logo" style={styles.webpackLogo} alt="Webpack logo" />
         </header>
 
-        <p className="App-intro">
-          Welcome to SS4 + REACT + WEBPACK <br />
-          To get started, edit <code>src/App.js</code> and save to reload Hello.
-        </p>
+        <Header />
         <div className={classes.cardHolder}>
           <CreateLink />
           <LinkList />

@@ -1,5 +1,14 @@
 import React, {Component} from 'react'
-import {graphql, gql} from 'react-apollo'
+import {graphql, gql, compose } from 'react-apollo'
+
+import {withStyles} from 'material-ui/styles';
+import TextField from 'material-ui/TextField';
+
+const styles = {
+  cardHolder: {
+    'display': 'flex',
+  }
+};
 
 class CreateLink extends Component {
 
@@ -12,23 +21,46 @@ class CreateLink extends Component {
 
   }
 
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
   render() {
+
+    const { classes } = this.props;
+
     return (
       <div>
+        <TextField
+          id="name"
+          label="Name"
+          className={classes.textField}
+          value={this.state.name}
+          onChange={this.handleChange('name')}
+          margin="normal"
+        />
         <div className='flex flex-column mt3'>
-          <input
-            className='mb2'
+          <TextField
+            id="CreateLink_description"
+            label="description"
+            className={classes.textField}
             value={this.state.description}
             onChange={(e) => this.setState({description: e.target.value})}
             type='text'
             placeholder='A description for the link'
+            margin="normal"
           />
-          <input
-            className='mb2'
+          <TextField
+            id="CreateLink_url"
+            label="url"
+            className={classes.textField}
             value={this.state.url}
             onChange={(e) => this.setState({url: e.target.value})}
             type='text'
             placeholder='The URL for the link'
+            margin="normal"
           />
         </div>
         <button
@@ -70,4 +102,10 @@ const CREATE_LINK_MUTATION = gql`
 
 
 // 3
-export default graphql(CREATE_LINK_MUTATION, {name: 'createLinkMutation'})(CreateLink)
+// export default graphql(CREATE_LINK_MUTATION, {name: 'createLinkMutation'})(CreateLink)
+
+
+export default compose(
+  graphql(CREATE_LINK_MUTATION, {name: 'createLinkMutation'}),
+  withStyles(styles)
+)(CreateLink);

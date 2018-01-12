@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
+import {ApolloClient, ApolloProvider, createNetworkInterface} from 'react-apollo';
 import './index.css';
 import App from './App';
 import GraphQLConfig from './config/GraphQLConfig';
+import {Switch, Route} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom'
 
 /**
  * Get GraphQL endpoint
@@ -40,8 +42,10 @@ const client = new ApolloClient({
  * currently found in ReactPage.ss
  */
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <App/>
+    </ApolloProvider>
+  </BrowserRouter>,
   document.getElementById('react-root')
 );
