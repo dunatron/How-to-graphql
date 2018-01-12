@@ -41,6 +41,27 @@ class LinkList extends Component {
 
 }
 
+/*
+// A practical example would look like this
+client.query({
+  query: gql`
+  query AllLinksQuery {
+    readLinks {
+      edges {
+        node {
+          ID
+          Title
+          description
+          url
+        }
+      }
+    }
+}
+`
+}).then(response => console.log(response.data));
+
+ */
+
 
 // if (loading) {
 //   return <CircularProgress className={classes.progress} />;
@@ -64,6 +85,6 @@ const All_LINKS_QUERY = gql`
       }
     }
 }
-`
+`;
 
 export default graphql(All_LINKS_QUERY, { name: 'allLinksQuery' }) (LinkList)

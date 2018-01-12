@@ -51,7 +51,8 @@
     "build:dev": "webpack --config webpack.config.js --env.development --env.buildType=dev --progress",
     "build:prod": "webpack -p --config webpack.config.js --devtool=none --env.buildType=prod --env.production --progress",
     "build:env": "webpack -p --config webpack.config.js --devtool=none --env.buildType=env --env.envsettings --progress",
-    "build:location": "webpack -p --config webpack.config.js --devtool=none --env.buildType=location --progress"
+    "build:location": "webpack -p --config webpack.config.js --devtool=none --env.buildType=location --progress",
+    "build:location:dev": "webpack --config webpack.config.js --devtool=source-map --env.buildType=location --progress"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -96,7 +97,10 @@
   },
   "devDependencies": {
     "apollo-client": "^2.0.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "graphql-anywhere": "^3.1.0",
     "material-ui": "^1.0.0-beta.16",
     "material-ui-icons": "^1.0.0-beta.15",

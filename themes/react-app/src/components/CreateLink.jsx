@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import async from 'async';
+import React, {Component} from 'react'
+import {graphql, gql} from 'react-apollo'
 
 class CreateLink extends Component {
 
@@ -10,8 +10,6 @@ class CreateLink extends Component {
       url: ''
     };
 
-    //this.nextMonthClick = this.nextMonthClick.bind(this);
-
   }
 
   render() {
@@ -21,14 +19,14 @@ class CreateLink extends Component {
           <input
             className='mb2'
             value={this.state.description}
-            onChange={(e) => this.setState({ description: e.target.value })}
+            onChange={(e) => this.setState({description: e.target.value})}
             type='text'
             placeholder='A description for the link'
           />
           <input
             className='mb2'
             value={this.state.url}
-            onChange={(e) => this.setState({ url: e.target.value })}
+            onChange={(e) => this.setState({url: e.target.value})}
             type='text'
             placeholder='The URL for the link'
           />
@@ -42,56 +40,34 @@ class CreateLink extends Component {
     )
   }
 
-  // _createLink() {
-  //   // Do in a sec
-  // }
-
-  // _createLink = async () => {
-  //   // ... you'll implement this in a bit
-  // }
-
   _createLink = async () => {
-
+    console.log('I want to create a new link');
+    const {description, url} = this.state;
+    await this.props.createLinkMutation({
+      variables: {
+        description,
+        url
+      }
+    })
   }
-
-  // async _createLink() {
-  //   const { description, url } = this.state
-  //   await this.props.createLinkMutation({
-  //     variables: {
-  //       description,
-  //       url
-  //     }
-  //   })
-  // };
-
-  // _createLink = async () => {
-  //   const { description, url } = this.state
-  //   await this.props.createLinkMutation({
-  //     variables: {
-  //       description,
-  //       url
-  //     }
-  //   })
-  // };
 
 }
 
 const CREATE_LINK_MUTATION = gql`
   # 2
-  mutation CreateLinkMutation($description: String!, $url: String!) {
-    createLink(
+  mutation CreateLinkMutation($description: String, $url: String) {
+    createLink(Input: {
       description: $description,
-      url: $url,
-    ) {
-      id
-      createdAt
-      url
-      description
+      url: $url
+    }) {
+    	ID,
+    	Created,
+    	url,
+    	description
     }
   }
 `;
 
 
-
 // 3
-export default graphql(CREATE_LINK_MUTATION, { name: 'createLinkMutation' })(CreateLink)
+export default graphql(CREATE_LINK_MUTATION, {name: 'createLinkMutation'})(CreateLink)

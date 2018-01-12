@@ -54,7 +54,7 @@ module.exports = (env = {}) => {
     cache: true,
     context: srcPath,
     entry: {
-      app: './index.jsx',
+      app: ['babel-polyfill','./index.jsx'],
     },
     watchOptions: {
       poll: true
