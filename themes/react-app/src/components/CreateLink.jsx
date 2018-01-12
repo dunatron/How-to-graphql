@@ -8,11 +8,18 @@ import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 
 const styles = theme => ({
+  createNewsForm : {
+    'padding': '20px',
+    'margin': '20px'
+  },
   createLinkTextFields: {
     'margin': '0 15px'
   },
   button: {
     margin: theme.spacing.unit,
+    'display': 'block',
+    'margin-left': 'auto',
+    'margin-right': 'auto'
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
@@ -45,8 +52,7 @@ class CreateLink extends Component {
     const { classes } = this.props;
 
     return (
-      <div>
-        <div className='flex flex-column mt3'>
+        <form className={classes.createNewsForm} noValidate autoComplete="off">
           <TextField
             id="CreateLink_title"
             label="title"
@@ -81,8 +87,7 @@ class CreateLink extends Component {
             Send
             <Icon className={classes.rightIcon}>send</Icon>
           </Button>
-        </div>
-      </div>
+        </form>
     )
   }
 

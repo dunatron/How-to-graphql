@@ -17201,11 +17201,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var styles = function styles(theme) {
   return {
+    createNewsForm: {
+      'padding': '20px',
+      'margin': '20px'
+    },
     createLinkTextFields: {
       'margin': '0 15px'
     },
     button: {
-      margin: theme.spacing.unit
+      margin: theme.spacing.unit,
+      'display': 'block',
+      'margin-left': 'auto',
+      'margin-right': 'auto'
     },
     leftIcon: {
       marginRight: theme.spacing.unit
@@ -17279,58 +17286,54 @@ var CreateLink = function (_Component) {
 
 
       return _react2.default.createElement(
-        'div',
-        null,
+        'form',
+        { className: classes.createNewsForm, noValidate: true, autoComplete: 'off' },
+        _react2.default.createElement(_TextField2.default, {
+          id: 'CreateLink_title',
+          label: 'title',
+          className: classes.createLinkTextFields,
+          value: this.state.title,
+          onChange: function onChange(e) {
+            return _this3.setState({ title: e.target.value });
+          },
+          type: 'text',
+          placeholder: 'A description for the link',
+          margin: 'normal'
+        }),
+        _react2.default.createElement(_TextField2.default, {
+          id: 'CreateLink_description',
+          label: 'description',
+          className: classes.createLinkTextFields,
+          value: this.state.description,
+          onChange: function onChange(e) {
+            return _this3.setState({ description: e.target.value });
+          },
+          type: 'text',
+          placeholder: 'A description for the link',
+          margin: 'normal'
+        }),
+        _react2.default.createElement(_TextField2.default, {
+          id: 'CreateLink_url',
+          label: 'url',
+          className: classes.createLinkTextFields,
+          value: this.state.url,
+          onChange: function onChange(e) {
+            return _this3.setState({ url: e.target.value });
+          },
+          type: 'text',
+          placeholder: 'The URL for the link',
+          margin: 'normal'
+        }),
         _react2.default.createElement(
-          'div',
-          { className: 'flex flex-column mt3' },
-          _react2.default.createElement(_TextField2.default, {
-            id: 'CreateLink_title',
-            label: 'title',
-            className: classes.createLinkTextFields,
-            value: this.state.title,
-            onChange: function onChange(e) {
-              return _this3.setState({ title: e.target.value });
-            },
-            type: 'text',
-            placeholder: 'A description for the link',
-            margin: 'normal'
-          }),
-          _react2.default.createElement(_TextField2.default, {
-            id: 'CreateLink_description',
-            label: 'description',
-            className: classes.createLinkTextFields,
-            value: this.state.description,
-            onChange: function onChange(e) {
-              return _this3.setState({ description: e.target.value });
-            },
-            type: 'text',
-            placeholder: 'A description for the link',
-            margin: 'normal'
-          }),
-          _react2.default.createElement(_TextField2.default, {
-            id: 'CreateLink_url',
-            label: 'url',
-            className: classes.createLinkTextFields,
-            value: this.state.url,
-            onChange: function onChange(e) {
-              return _this3.setState({ url: e.target.value });
-            },
-            type: 'text',
-            placeholder: 'The URL for the link',
-            margin: 'normal'
-          }),
+          _Button2.default,
+          { className: classes.button, raised: true, color: 'primary', onClick: function onClick() {
+              return _this3._createLink();
+            } },
+          'Send',
           _react2.default.createElement(
-            _Button2.default,
-            { className: classes.button, raised: true, color: 'primary', onClick: function onClick() {
-                return _this3._createLink();
-              } },
-            'Send',
-            _react2.default.createElement(
-              _Icon2.default,
-              { className: classes.rightIcon },
-              'send'
-            )
+            _Icon2.default,
+            { className: classes.rightIcon },
+            'send'
           )
         )
       );
