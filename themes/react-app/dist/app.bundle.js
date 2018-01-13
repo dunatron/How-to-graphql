@@ -12388,7 +12388,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var GC_USER_ID = exports.GC_USER_ID = 'graphcool-user-id';
-var AUTH_TOKEN = exports.AUTH_TOKEN = 'graphcool-auth-token';
+var GC_AUTH_TOKEN = exports.GC_AUTH_TOKEN = 'graphcool-auth-token';
 
 /***/ }),
 /* 218 */
@@ -51772,6 +51772,8 @@ var _constants = __webpack_require__(217);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -51797,18 +51799,51 @@ var Header = function (_Component) {
   _inherits(Header, _Component);
 
   function Header() {
+    var _ref,
+        _this2 = this;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Header);
 
-    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Header.__proto__ || Object.getPrototypeOf(Header)).call.apply(_ref, [this].concat(args))), _this), _this._logout = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log('Trying to logout here');
+              console.log(_constants.GC_USER_ID);
+              console.log(_constants.GC_AUTH_TOKEN);
+              localStorage.removeItem(_constants.GC_USER_ID);
+              localStorage.removeItem(_constants.GC_AUTH_TOKEN);
+
+              console.log('REMOVE THE TOKEN');
+
+              console.log(_constants.GC_USER_ID);
+              console.log(_constants.GC_AUTH_TOKEN);
+              // this.props.history.push(`/new/1`)
+              _this.props.history.push('/');
+
+            case 9:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this2);
+    })), _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Header, [{
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var userId = localStorage.getItem(_constants.GC_USER_ID);
-      var authToken = localStorage.getItem(_constants.AUTH_TOKEN);
+      var authToken = localStorage.getItem(_constants.GC_AUTH_TOKEN);
       var classes = this.props.classes;
 
       return _react2.default.createElement(
@@ -51835,7 +51870,7 @@ var Header = function (_Component) {
               { to: '/', className: classes.flex },
               'New '
             ),
-            _react2.default.createElement(
+            userId && _react2.default.createElement(
               _reactRouterDom.Link,
               { to: '/create', className: classes.flex },
               'Create '
@@ -51846,9 +51881,7 @@ var Header = function (_Component) {
               authToken ? _react2.default.createElement(
                 'div',
                 { className: 'ml1 pointer black', onClick: function onClick() {
-                    localStorage.removeItem(_constants.GC_USER_ID);
-                    localStorage.removeItem(_constants.AUTH_TOKEN);
-                    _this2.props.history.push('/new/1');
+                    return _this3._logout();
                   } },
                 'logout'
               ) : _react2.default.createElement(
@@ -69416,7 +69449,7 @@ var Login = function (_Component) {
         }
       }, _callee, _this2);
     })), _this._saveUserData = function (token) {
-      localStorage.setItem(_constants.AUTH_TOKEN, token);
+      localStorage.setItem(_constants.GC_AUTH_TOKEN, token);
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 

@@ -1,13 +1,14 @@
 <?php
 namespace MyOrg\Model;
 
+use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\GraphQL\Scaffolding\Interfaces\ScaffoldingProvider;
+use SilverStripe\GraphQL\Scaffolding\Scaffolders\SchemaScaffolder;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Assets\Image;
 use SilverStripe\Security\Member;
 
 
-class Link extends DataObject
+class Link extends DataObject implements ScaffoldingProvider
 {
     private static $db = [
         'Title' => 'Varchar(255)',
@@ -40,6 +41,31 @@ class Link extends DataObject
 //        }
 //        return Permission::check('ADMIN', 'any', $member);
         return true;
+    }
+
+    public function provideGraphQLScaffolding(SchemaScaffolder $scaffolder)
+    {
+        $scaffolder
+            ->query('SingleLink', __CLASS__)
+            ->addArgs([
+                'ID' => 'ID!'
+            ])
+            ->setResolver(function ($object, array $args, $context, ResolveInfo $info) {
+                $link = self::get()->byID($args['ID']);
+                if (!$link) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Link #%s does not exist',
+                        $args['ID']
+                    ));
+                }
+                $params = [
+                    'ID' => $link->ID,
+                ];
+
+                return $link;
+            })->setUsePagination(false);
+
+        return $scaffolder;
     }
 
 
