@@ -1,6 +1,30 @@
 import React, { Component } from 'react'
 import { graphql, gql, compose } from 'react-apollo'
-import { GC_AUTH_TOKEN } from '../constants'
+import { GC_USER_ID, GC_AUTH_TOKEN } from '../constants'
+import JWTLoginForm from './JWTLoginForm';
+import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
+import {withStyles} from "material-ui/styles/index";
+
+const styles = theme => ({
+  TextField: {
+    'margin': '0 15px'
+  },
+  button: {
+    margin: theme.spacing.unit,
+    'display': 'block',
+    'margin-left': 'auto',
+    'margin-right': 'auto'
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+});
 
 class Login extends Component {
 
@@ -13,43 +37,52 @@ class Login extends Component {
 
   render() {
 
+    const { classes } = this.props;
+
     return (
       <div>
         <h4 className='mv3'>{this.state.login ? 'Login' : 'Sign Up'}</h4>
         <div className='flex flex-column'>
           {!this.state.login &&
-          <input
+          <TextField
+            label="First Name"
+            className={classes.TextField}
             value={this.state.FirstName}
             onChange={(e) => this.setState({ FirstName: e.target.value })}
             type='text'
             placeholder='Your name'
+            margin="normal"
           />}
-          <input
+          <TextField
+            label="Email"
+            className={classes.TextField}
             value={this.state.Email}
             onChange={(e) => this.setState({ Email: e.target.value })}
             type='text'
             placeholder='Your email address'
+            margin="normal"
           />
-          <input
+          <TextField
+            label="Password"
+            className={classes.TextField}
             value={this.state.Password}
             onChange={(e) => this.setState({ Password: e.target.value })}
             type='password'
             placeholder='Choose a safe password'
+            margin="normal"
           />
         </div>
         <div className='flex mt3'>
-          <div
-            className='pointer mr2 button'
-            onClick={() => this._confirm()}
-          >
+          <Button
+            className={classes.button} raised color="primary"
+            onClick={() => this._confirm()} >
             {this.state.login ? 'login' : 'create account' }
-          </div>
-          <div
-            className='pointer button'
-            onClick={() => this.setState({ login: !this.state.login })}
-          >
+          </Button>
+          <Button
+            className={classes.button} raised color="primary"
+            onClick={() => this.setState({ login: !this.state.login })} >
             {this.state.login ? 'need to create an account?' : 'already have an account?'}
-          </div>
+          </Button>
         </div>
       </div>
     )
@@ -64,10 +97,20 @@ class Login extends Component {
           Email,
           Password,
         },
-      }).catch(err => console.log(err));
-      console.log(result);
-      const { user, token } = result.data.login;
-      this._saveUserData(user.id, token)
+      })
+
+        .then(response => {
+          //localStorage.setItem('jwt', response.data.createToken.Token);
+          const { ID, Token } = response.data.createToken;
+          console.log('OK Just login as nothing thats ok')
+          console.log(ID)
+          console.log(Token)
+
+          this._saveUserData(ID, Token)
+        })
+
+        .catch(err => console.log(err));
+
     } else {
       // SIGN_UP
       const result = await this.props.signupMutation({
@@ -77,32 +120,19 @@ class Login extends Component {
           Password,
         },
       });
-      console.log('hmmmm sign me up plaese');
-      console.log(result.data.createMember);
-      const { Member, token } = result.data.createMember;
-      console.log('Member data');
-      console.log(Member);
-      this._saveUserData(result.data.createMember.ID, token)
+
+      const { ID, token } = result.data.createMember
+      this._saveUserData(ID, token)
     }
     this.props.history.push(`/`)
   };
 
-  _saveUserData = (token) => {
-    localStorage.setItem(GC_AUTH_TOKEN, token)
+  _saveUserData = (id, token) => {
+    localStorage.setItem('USER_ID', id);
+    localStorage.setItem('AUTH_TOKEN', token)
   }
 
 }
-
-// const SIGNUP_MUTATION = gql`
-//   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
-//     signup(email: $email, password: $password, name: $name) {
-//       user {
-//         id
-//       }
-//       token
-//     }
-//   }
-// `;
 
 const SIGNUP_MUTATION = gql`
   mutation newUser( $FirstName: String, $Email: String) {
@@ -118,30 +148,17 @@ const SIGNUP_MUTATION = gql`
 }
 `;
 
-// const LOGIN_MUTATION = gql`
-//   mutation LoginMutation($email: String!, $password: String!) {
-//     login(email: $email, password: $password) {
-//       user {
-//         id
-//       }
-//       token
-//     }
-//   }
-// `;
-
 const LOGIN_MUTATION = gql`
-  mutation SignInUserMutation($Email: String!, $Password: String!) {
-  signinUser(Email: $Email, Password: $Password) {
-    ID
-    FirstName
-    Email
-    Password
-  }
-}
-
-`;
+mutation createToken($Email: String!, $Password: String!) {
+    createToken(Email: $Email, Password: $Password) {
+      ID,
+      FirstName,
+      Token
+    },
+}`;
 
 export default compose(
   graphql(SIGNUP_MUTATION, { name: 'signupMutation' }),
   graphql(LOGIN_MUTATION, { name: 'loginMutation' }),
+  withStyles(styles)
 )(Login)

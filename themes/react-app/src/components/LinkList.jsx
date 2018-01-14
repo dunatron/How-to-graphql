@@ -22,7 +22,7 @@ class LinkList extends Component {
     // 3
     const linksToRender = this.props.allLinksQuery.readLinks;
 
-    console.log(this.props.allLinksQuery.readLinks);
+    // console.log(this.props.allLinksQuery.readLinks);
 
     return (
       <div>

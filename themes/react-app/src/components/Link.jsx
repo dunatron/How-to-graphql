@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 
 class Link extends Component {
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <div>
         <div>{this.props.link.Title}</div>

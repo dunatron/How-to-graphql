@@ -99,8 +99,15 @@ class CreateLink extends Component {
         title,
         description,
         url
-      }
+      },
+      refetchQueries: [
+        `AllLinksQuery`
+      ]
     })
+      .then(response => {
+        console.log(response)
+      })
+
     this.props.history.push(`/`)
   }
 
