@@ -69346,7 +69346,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  mutation newUser( $FirstName: String, $Email: String) {\n  createMember(Input: {\n    FirstName: $FirstName,\n    Email: $Email,\n  }) {\n    ID\n    Name\n    FirstName\n    Email\n  }\n}\n'], ['\n  mutation newUser( $FirstName: String, $Email: String) {\n  createMember(Input: {\n    FirstName: $FirstName,\n    Email: $Email,\n  }) {\n    ID\n    Name\n    FirstName\n    Email\n  }\n}\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      user {\n        id\n      }\n      token\n    }\n  }\n'], ['\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      user {\n        id\n      }\n      token\n    }\n  }\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  mutation SignInUserMutation($Email: String!, $Password: String!) {\n  signinUser(Email: $Email, Password: $Password) {\n    ID\n    FirstName\n    Email\n    Password\n  }\n}\n\n'], ['\n  mutation SignInUserMutation($Email: String!, $Password: String!) {\n  signinUser(Email: $Email, Password: $Password) {\n    ID\n    FirstName\n    Email\n    Password\n  }\n}\n\n']);
 
 var _react = __webpack_require__(1);
 
@@ -69398,7 +69398,7 @@ var Login = function (_Component) {
               _this$state = _this.state, FirstName = _this$state.FirstName, Email = _this$state.Email, Password = _this$state.Password;
 
               if (!_this.state.login) {
-                _context.next = 9;
+                _context.next = 10;
                 break;
               }
 
@@ -69408,18 +69408,22 @@ var Login = function (_Component) {
                   Email: Email,
                   Password: Password
                 }
+              }).catch(function (err) {
+                return console.log(err);
               });
 
             case 4:
               result = _context.sent;
+
+              console.log(result);
               _result$data$login = result.data.login, user = _result$data$login.user, token = _result$data$login.token;
 
               _this._saveUserData(user.id, token);
-              _context.next = 18;
+              _context.next = 19;
               break;
 
-            case 9:
-              _context.next = 11;
+            case 10:
+              _context.next = 12;
               return _this.props.signupMutation({
                 variables: {
                   FirstName: FirstName,
@@ -69428,7 +69432,7 @@ var Login = function (_Component) {
                 }
               });
 
-            case 11:
+            case 12:
               _result = _context.sent;
 
               console.log('hmmmm sign me up plaese');
@@ -69439,10 +69443,10 @@ var Login = function (_Component) {
               console.log(Member);
               _this._saveUserData(_result.data.createMember.ID, _token);
 
-            case 18:
+            case 19:
               _this.props.history.push('/');
 
-            case 19:
+            case 20:
             case 'end':
               return _context.stop();
           }
@@ -69537,6 +69541,17 @@ var Login = function (_Component) {
 // `;
 
 var SIGNUP_MUTATION = (0, _reactApollo.gql)(_templateObject);
+
+// const LOGIN_MUTATION = gql`
+//   mutation LoginMutation($email: String!, $password: String!) {
+//     login(email: $email, password: $password) {
+//       user {
+//         id
+//       }
+//       token
+//     }
+//   }
+// `;
 
 var LOGIN_MUTATION = (0, _reactApollo.gql)(_templateObject2);
 

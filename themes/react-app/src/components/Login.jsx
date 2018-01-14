@@ -58,15 +58,18 @@ class Login extends Component {
   _confirm = async () => {
     const { FirstName, Email, Password } = this.state;
     if (this.state.login) {
+      // LOGIN
       const result = await this.props.loginMutation({
         variables: {
           Email,
           Password,
         },
-      });
+      }).catch(err => console.log(err));
+      console.log(result);
       const { user, token } = result.data.login;
       this._saveUserData(user.id, token)
     } else {
+      // SIGN_UP
       const result = await this.props.signupMutation({
         variables: {
           FirstName,
@@ -115,15 +118,27 @@ const SIGNUP_MUTATION = gql`
 }
 `;
 
+// const LOGIN_MUTATION = gql`
+//   mutation LoginMutation($email: String!, $password: String!) {
+//     login(email: $email, password: $password) {
+//       user {
+//         id
+//       }
+//       token
+//     }
+//   }
+// `;
+
 const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      user {
-        id
-      }
-      token
-    }
+  mutation SignInUserMutation($Email: String!, $Password: String!) {
+  signinUser(Email: $Email, Password: $Password) {
+    ID
+    FirstName
+    Email
+    Password
   }
+}
+
 `;
 
 export default compose(

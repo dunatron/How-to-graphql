@@ -11,11 +11,11 @@ SilverStripe\GraphQL\Controller:
     Allow-Methods:  'GET, POST, OPTIONS'
     Max-Age: 86400
   schema:
-    scaffolding_providers: [MyOrg\Model\Event, MyOrg\Model\Link]
+    scaffolding_providers: [MyOrg\Model\Event, MyOrg\Model\Link, MyOrg\Security\AppUser]
     scaffolding:
       types:
-        SilverStripe\Security\Member:
-          fields: [ID, Name, FirstName, Surname, Email]
+        MyOrg\Security\AppUser:
+          fields: [ID, Name, FirstName, Surname, Email, Password]
           operations:
             create: true
             read: true
