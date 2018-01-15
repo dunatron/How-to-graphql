@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { graphql, gql, compose } from 'react-apollo'
-import { GC_USER_ID, GC_AUTH_TOKEN } from '../constants'
-import JWTLoginForm from './JWTLoginForm';
 import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
@@ -102,11 +100,14 @@ class Login extends Component {
         .then(response => {
           //localStorage.setItem('jwt', response.data.createToken.Token);
           const { ID, Token } = response.data.createToken;
-          console.log('OK Just login as nothing thats ok')
-          console.log(ID)
-          console.log(Token)
 
-          this._saveUserData(ID, Token)
+          if(typeof Token === 'undefined') {
+            console.log('TOKEN IS NOT DEFINED')
+            alert('Please Try again')
+          }else {
+            this._saveUserData(ID, Token)
+            this.props.history.push(`/`)
+          }
         })
 
         .catch(err => console.log(err));
@@ -123,8 +124,9 @@ class Login extends Component {
 
       const { ID, token } = result.data.createMember
       this._saveUserData(ID, token)
+      this.props.history.push(`/`)
     }
-    this.props.history.push(`/`)
+
   };
 
   _saveUserData = (id, token) => {

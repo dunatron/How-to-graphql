@@ -45,7 +45,6 @@ class Header extends Component {
     const authToken = localStorage.getItem('AUTH_TOKEN');
     const {classes} = this.props;
 
-    console.log('FFS')
     console.log(authToken);
 
     return (

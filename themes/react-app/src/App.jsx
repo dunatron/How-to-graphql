@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {graphql, gql, compose } from 'react-apollo'
 import ReactLogo from './img/logo.svg';
 import './App.css';
 import WebpackLogo from './img/webpack.svg';
@@ -9,7 +10,9 @@ import { withStyles } from 'material-ui/styles';
 import Login from './components/Login';
 import CreateLink from './components/CreateLink';
 import LinkList from './components/LinkList';
-import { Switch, Route } from 'react-router-dom';
+// import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import LoginForm from './components/JWTLoginForm'
 
 const styles = {
   cardHolder: {
@@ -33,6 +36,18 @@ class App extends Component {
   render() {
 
     const { classes } = this.props;
+
+    const { data: { validateToken, loading } } = this.props;
+    if (loading) {
+      return null;
+    }
+
+    console.log('DO we have a token');
+    console.log(validateToken)
+
+    console.log('Apps Data')
+    console.log(this.props)
+
     return (
       <div className="App">
         <header className="App-header">
@@ -43,17 +58,33 @@ class App extends Component {
         </header>
 
         <Header />
-        <div className={classes.cardHolder}>
+
           <Switch>
-            <Route exact path='/' component={LinkList} />
-            <Route exact path='/create' component={CreateLink} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/create' component={CreateLink} />
+            <Route exact path='/' component={LinkList} />
           </Switch>
-        </div>
+
+        {validateToken.Valid && 'You are logged in.'}
+        {!validateToken.Valid && <LoginForm />}
+
       </div>
     )
   }
 }
 
-// export default App;
-export default withStyles(styles)(App)
+const validateToken = gql`
+query validateToken {
+    validateToken {
+      Valid
+      Message
+      Code
+    }
+}`;
+
+// export default withStyles(styles)(App)
+
+export default compose(
+  graphql(validateToken),
+  withStyles(styles)
+)(App);
