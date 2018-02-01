@@ -4,7 +4,6 @@ import {ApolloClient, ApolloProvider, createNetworkInterface} from 'react-apollo
 import './index.css';
 // import GraphQLConfig from './config/GraphQLConfig';
 import registerServiceWorker from './registerServiceWorker';
-import { AUTH_TOKEN } from './constants'
 import store from './state/store';
 import { Provider as Redux } from 'react-redux';
 import ApolloApp from './ApolloApp';

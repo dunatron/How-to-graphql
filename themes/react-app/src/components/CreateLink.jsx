@@ -106,7 +106,7 @@ class CreateLink extends Component {
     })
       .then(response => {
         console.log(response)
-      })
+      });
 
     this.props.history.push(`/`)
   }

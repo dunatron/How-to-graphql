@@ -1,4 +1,9 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
+import {withStyles} from "material-ui/styles/index";
 
 const noop = () => {};
 
@@ -31,11 +36,10 @@ class LoginForm extends React.Component {
   }
   render () {
     return (<form style={{ float: 'right' }} onSubmit={this.handleSubmit}>
-      <label htmlFor="username">Username</label>
-      <input id="username" type="text" onChange={this.handleUserNameChange} value={this.state.username} />
-      <label>Password</label>
-      <input type="password" onChange={this.handlePasswordChange} value={this.state.password} />
-      <button type="submit">Log in</button>
+      <TextField label="Username" id="username" type="text" placeholder="username" onChange={this.handleUserNameChange} value={this.state.username} />
+
+      <TextField label="Password" type="password" onChange={this.handlePasswordChange} value={this.state.password} />
+      <Button raised color="primary" type="submit">Log in</Button>
     </form>);
   }
 }
@@ -43,4 +47,5 @@ LoginForm.defaultProps = {
   onSubmit: noop,
   onError: noop
 }
+
 export default LoginForm;
