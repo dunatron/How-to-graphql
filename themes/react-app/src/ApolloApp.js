@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom'
 
-const httpLink = new HttpLink({ uri: 'http://howtographql.d/graphql' });
+const httpLink = new HttpLink({ uri: 'http://hacker-news.whatshapp.nz/graphql' });
 const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   if (token) {

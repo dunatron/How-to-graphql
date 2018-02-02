@@ -14,8 +14,7 @@ ReactDOM.render(
   </Redux>,
   document.getElementById('react-root')
 );
-// I have no https certs....
-// registerServiceWorker();
+registerServiceWorker();
 
 /**
  * Get GraphQL endpoint
