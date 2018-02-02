@@ -72,7 +72,7 @@ class Link extends Component {
 
           <div className={classes.actionsContainer}>
             <div> {this.props.link.VotesOnLink.length}votes |
-              by {this.props.link.OwnerID ? this.props.link.OwnerID : <div>anon</div>}</div>
+              by {this.props.link.OwnerID ? this.props.link.OwnerID : <div className={classes.linkURL}>anon</div>}</div>
             {timeDifferenceForDate(this.props.link.Created)}
           </div>
         </div>
