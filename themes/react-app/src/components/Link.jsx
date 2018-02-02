@@ -24,6 +24,7 @@ const styles = theme => ({
     'display': 'flex',
     'flex-direction': 'column',
     'align-items': 'flex-start',
+    'font-size': 'large'
   },
   itemNumber: {
     'align-self': 'flex-start',
@@ -37,6 +38,9 @@ const styles = theme => ({
   },
   actionsContainer: {
     display: 'flex',
+    'font-size': 'small'
+  },
+  linkURL: {
     'font-size': 'small'
   }
 });
@@ -63,7 +67,7 @@ class Link extends Component {
 
         <div className={classes.linkBody}>
           <div className={classes.linkDescription}>
-            <div>{this.props.link.description} ({this.props.link.url})</div>
+            <div>{this.props.link.description} <span>({this.props.link.url})</span></div>
           </div>
 
           <div className={classes.actionsContainer}>
