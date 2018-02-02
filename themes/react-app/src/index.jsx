@@ -14,7 +14,7 @@ ReactDOM.render(
   </Redux>,
   document.getElementById('react-root')
 );
-registerServiceWorker();
+// registerServiceWorker();
 
 /**
  * Get GraphQL endpoint
