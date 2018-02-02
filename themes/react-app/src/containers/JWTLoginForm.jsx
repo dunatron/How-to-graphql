@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, gql, compose } from 'react-apollo';
 import { setToken } from '../actions/tokenActions';
-import LoginForm from '../ui/LoginForm';
+import LoginForm from '../components/Login';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
@@ -19,7 +19,7 @@ class JWTLoginForm extends React.Component {
     })
       .then(response => {
         localStorage.setItem('jwt', response.data.createToken.Token);
-        this.props.actions.setToken({token: response.data.createToken.Token})
+        this.props.actions.setToken(response.data.createToken.Token)
       })
   };
   render () {

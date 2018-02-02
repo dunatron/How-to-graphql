@@ -1,34 +1,46 @@
 import React, { Component } from 'react'
 import Link from './Link'
-import { graphql, gql } from 'react-apollo'
-// import gql from 'graphql-tag'
+import { graphql, gql, compose } from 'react-apollo'
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 
-
+const styles = theme => ({
+  linkContainer: {
+    display: 'block',
+    margin: '30px 15px'
+  }
+});
 
 class LinkList extends Component {
 
+  _updateCacheAfterVote = (store, createVote, linkID) => {
+    // 1
+    const data = store.readQuery({query: All_LINKS_QUERY});
+    // 2
+    const votedLink = data.readLinks.edges.find(link => link.node.ID === linkID);
+    // 3
+    store.writeQuery({ query: All_LINKS_QUERY, data })
+  };
+
   render() {
+
+    const {classes} = this.props;
 
     // 1
     if (this.props.allLinksQuery && this.props.allLinksQuery.loading) {
       return <div>Loading Hacker Links</div>
     }
-
     // 2
     if (this.props.allLinksQuery && this.props.allLinksQuery.error) {
       return <div>Error</div>
     }
-
     // 3
     const linksToRender = this.props.allLinksQuery.readLinks;
 
-    // console.log(this.props.allLinksQuery.readLinks);
-
     return (
-      <div>
-        {linksToRender.edges.map(edge => (
-         <Link key={edge.node.ID} link={edge.node}/>
-          // <div>{edge.node.toString()}</div>
+      <div className={classes.linkContainer}>
+        {linksToRender.edges.map((edge, index) => (
+         <Link key={edge.node.ID} updateStoreAfterVote={this._updateCacheAfterVote} index={index} link={edge.node}/>
         ))}
       </div>
     )
@@ -43,12 +55,21 @@ const All_LINKS_QUERY = gql`
         node {
           ID
           Title
+          Created
           description
           url
+          OwnerID
+          VotesOnLink {
+            ID
+            VoterID
+          }
         }
       }
     }
 }
 `;
 
-export default graphql(All_LINKS_QUERY, { name: 'allLinksQuery' }) (LinkList)
+export default compose(
+  graphql(All_LINKS_QUERY, { name: 'allLinksQuery' }),
+  withStyles(styles)
+) (LinkList)

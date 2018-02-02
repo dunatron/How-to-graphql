@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom'
 
-// localStorage.removeItem('jwt')
 const httpLink = new HttpLink({ uri: 'http://howtographql.d/graphql' });
 const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -21,7 +20,7 @@ const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
     console.log(token)
   }
   return forward(operation);
-})
+});
 
 const createClient = (token) => new ApolloClient({
   link: concat(createAuthMiddleware(token), httpLink),

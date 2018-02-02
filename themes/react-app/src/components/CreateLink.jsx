@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {graphql, gql, compose } from 'react-apollo'
+import {graphql, gql, compose} from 'react-apollo'
 
 import {withStyles} from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
@@ -8,7 +8,7 @@ import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 
 const styles = theme => ({
-  createNewsForm : {
+  createNewsForm: {
     'padding': '20px',
     'margin': '20px'
   },
@@ -49,56 +49,64 @@ class CreateLink extends Component {
 
   render() {
 
-    const { classes } = this.props;
+    const {classes} = this.props;
 
     return (
-        <form className={classes.createNewsForm} noValidate autoComplete="off">
-          <TextField
-            id="CreateLink_title"
-            label="title"
-            className={classes.createLinkTextFields}
-            value={this.state.title}
-            onChange={(e) => this.setState({title: e.target.value})}
-            type='text'
-            placeholder='A description for the link'
-            margin="normal"
-          />
-          <TextField
-            id="CreateLink_description"
-            label="description"
-            className={classes.createLinkTextFields}
-            value={this.state.description}
-            onChange={(e) => this.setState({description: e.target.value})}
-            type='text'
-            placeholder='A description for the link'
-            margin="normal"
-          />
-          <TextField
-            id="CreateLink_url"
-            label="url"
-            className={classes.createLinkTextFields}
-            value={this.state.url}
-            onChange={(e) => this.setState({url: e.target.value})}
-            type='text'
-            placeholder='The URL for the link'
-            margin="normal"
-          />
-          <Button className={classes.button} raised color="primary" onClick={() => this._createLink()}>
-            Send
-            <Icon className={classes.rightIcon}>send</Icon>
-          </Button>
-        </form>
+      <form className={classes.createNewsForm} noValidate autoComplete="off">
+        <TextField
+          id="CreateLink_title"
+          label="title"
+          className={classes.createLinkTextFields}
+          value={this.state.title}
+          onChange={(e) => this.setState({title: e.target.value})}
+          type='text'
+          placeholder='A description for the link'
+          margin="normal"
+        />
+        <TextField
+          id="CreateLink_description"
+          label="description"
+          className={classes.createLinkTextFields}
+          value={this.state.description}
+          onChange={(e) => this.setState({description: e.target.value})}
+          type='text'
+          placeholder='A description for the link'
+          margin="normal"
+        />
+        <TextField
+          id="CreateLink_url"
+          label="url"
+          className={classes.createLinkTextFields}
+          value={this.state.url}
+          onChange={(e) => this.setState({url: e.target.value})}
+          type='text'
+          placeholder='The URL for the link'
+          margin="normal"
+        />
+        <Button className={classes.button} raised color="primary" onClick={() => this._createLink()}>
+          Send
+          <Icon className={classes.rightIcon}>send</Icon>
+        </Button>
+      </form>
     )
   }
 
   _createLink = async () => {
-    console.log('I want to create a new link');
-    const { title, description, url } = this.state;
+    const createdById = localStorage.getItem('GC_USER_ID');
+
+    if (!createdById) {
+      alert('You shall not create without signing in...');
+      this.props.history.push(`/login`);
+      return;
+    }
+
+    const {title, description, url} = this.state;
     await this.props.createLinkMutation({
       variables: {
         title,
         description,
-        url
+        url,
+        createdById
       },
       refetchQueries: [
         `AllLinksQuery`
@@ -115,17 +123,19 @@ class CreateLink extends Component {
 
 const CREATE_LINK_MUTATION = gql`
   # 2
-  mutation CreateLinkMutation($title: String, $description: String, $url: String) {
+  mutation CreateLinkMutation($title: String, $description: String, $url: String, $createdById: ID) {
     createLink(Input: {
       Title: $title
       description: $description,
-      url: $url
+      url: $url,
+      OwnerID: $createdById
     }) {
     	ID,
     	Created,
     	Title,
     	url,
     	description
+    	OwnerID
     }
   }
 `;

@@ -3,8 +3,10 @@ import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import Icon from 'material-ui/Icon';
 import {withStyles} from "material-ui/styles/index";
+import {setToken, setUserName} from "../actions/tokenActions";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 const styles = theme => ({
   TextField: {
@@ -35,20 +37,14 @@ class Login extends Component {
 
   render() {
 
-    const {classes} = this.props;
+    const {classes, validateTokenQuery: {validateToken, loading}} = this.props;
 
-    const {data: {validateToken, loading}} = this.props;
     if (loading) {
       return null;
     }
 
-    console.group('Login.jsx PROPS:AFTER');
-    console.log(this.props);
-    console.groupEnd();
-
     return (
       <div>
-
         {validateToken.Valid && 'You are logged in.'}
         {!validateToken.Valid && <div>
           <h4 className='mv3'>{this.state.login ? 'Login' : 'Sign Up'}</h4>
@@ -95,107 +91,66 @@ class Login extends Component {
             </Button>
           </div>
         </div>}
-
-
       </div>
     )
   }
 
   _confirm = async () => {
     const {FirstName, Email, Password} = this.state;
+
     if (this.state.login) {
       // LOGIN
-
-      // 1.
-      this.props.loginMutation({
+      await this.props.signinUserMutation({
         variables: {
           Email,
           Password,
         },
       })
         .then(response => {
-
-          console.group('CONFIRM LOGIN ');
-          console.log(response);
-          console.groupEnd();
-
-          //localStorage.setItem('jwt', response.data.createToken.Token);
           const {ID, Token} = response.data.createToken;
-
-          if (typeof Token === 'undefined') {
+          if (typeof Token === 'undefined' || Token === null) {
             console.log('TOKEN IS NOT DEFINED');
-            alert('Please Try again')
+            alert('Credentials are not valid: Please try again')
           } else {
+            //localStorage.setItem('jwt', Token);
             this._saveUserData(ID, Token);
-            this.props.history.push(`/`)
           }
         })
         .catch(err => console.log(err));
 
 
-      // 2.
-      // const result = await this.props.loginMutation({
-      //   variables: {
-      //     Email,
-      //     Password,
-      //   },
-      // });
-      //
-      // console.log(result);
-
-      // 3.
-
-      // const {loginMutation} = this.props;
-      // loginMutation({
-      //   variables: {
-      //     Email,
-      //     Password,
-      //   },
-      // })
-      //   .then(response => {
-      //   localStorage.setItem('jwt', response.data.createToken.Token);
-      //   console.log(response)
-      // })
-
-
     } else {
       // SIGN_UP
-      const result = await this.props.signupMutation({
+      await this.props.createUserMutation({
         variables: {
           FirstName,
           Email,
           Password,
         },
-      });
-
-      const {ID, token} = result.data.createMember
-      this._saveUserData(ID, token);
-
-      // After signing up, it would make sense to validate the token
-
-
-      this.props.history.push(`/`)
+      })
+        .then((res) => {
+          // const {ID, token} = res.data.createMember
+          const {createMember, createToken} = res.data;
+          this._saveUserData(createToken.ID, createToken.Token);
+        })
+        .catch((err) => {
+          alert(err)
+        });
     }
 
   };
 
   _saveUserData = (id, token) => {
-    localStorage.setItem('USER_ID', id);
-    localStorage.setItem('AUTH_TOKEN', token);
+    localStorage.setItem('GC_USER_ID', id);
+    // localStorage.setItem('USER_NAME', id);
     localStorage.setItem('jwt', token);
-
-    // Set GraphCool
-    // localStorage.setItem('GC_USER_ID', id);
-    // localStorage.setItem('GC_AUTH_TOKEN', id);
-
-    // Dispact
-
+    this.props.history.push(`/`);
   }
 
 }
 
-const SIGNUP_MUTATION = gql`
-
+// This allows for sending 2 request in 1. Sign-up and sign in with a JWToken
+const CREATE_USER_MUTATION = gql`
   mutation newUser( $FirstName: String, $Email: String!, $Password: String!) {
   createMember(Input: {
     FirstName: $FirstName,
@@ -207,17 +162,16 @@ const SIGNUP_MUTATION = gql`
     FirstName
     Email
   }
-  
+ 
   createToken(Email: $Email, Password: $Password) {
     ID,
     FirstName,
     Token
   }
-  
 }
 `;
-
-const tokenMutation = gql`
+// Basic mutation for retrieving a JWToken on login
+const SIGNIN_USER_MUTATION = gql`
 mutation createToken($Email: String!, $Password: String!) {
     createToken(Email: $Email, Password: $Password) {
       ID,
@@ -225,7 +179,6 @@ mutation createToken($Email: String!, $Password: String!) {
       Token
     },
 }`;
-
 const validateToken = gql`
 query validateToken {
     validateToken {
@@ -235,16 +188,22 @@ query validateToken {
     }
 }`;
 
-// export default compose(
-//   graphql(SIGNUP_MUTATION, { name: 'signupMutation' }),
-//   graphql(LOGIN_MUTATION, { name: 'loginMutation' }),
-//   withStyles(styles)
-// )(Login)
+const reduxWrapper = connect(
+  state => ({
+    token: state.token,
+  }),
+  dispatch => ({
+    actions: {
+      setToken: bindActionCreators(setToken, dispatch),
+      setUserName: bindActionCreators(setUserName, dispatch)
+    }
+  }));
 
 export default compose(
+  reduxWrapper,
   graphql(validateToken),
-  graphql(validateToken, {name: 'tokenQuery'}),
-  graphql(tokenMutation, {name: 'loginMutation'}),
-  graphql(SIGNUP_MUTATION, {name: 'signupMutation'}),
+  graphql(validateToken, {name: 'validateTokenQuery'}),
+  graphql(CREATE_USER_MUTATION, {name: 'createUserMutation'}),
+  graphql(SIGNIN_USER_MUTATION, {name: 'signinUserMutation'}),
   withStyles(styles)
 )(Login);

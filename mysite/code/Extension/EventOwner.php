@@ -3,6 +3,7 @@
 namespace MyOrg\Extension;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use MyOrg\Model\Vote;
 use SilverStripe\GraphQL\Scaffolding\Interfaces\ScaffoldingProvider;
 use SilverStripe\GraphQL\Scaffolding\Scaffolders\SchemaScaffolder;
 use SilverStripe\ORM\DataExtension;
@@ -18,7 +19,8 @@ class EventOwner extends DataExtension implements ScaffoldingProvider
 
     private static $has_many = [
         'Events' => Event::class,
-        'Links' => Link::class
+        'Links' => Link::class,
+        'UsersVotes' => Vote::class,
     ];
 
     private static $many_many = [

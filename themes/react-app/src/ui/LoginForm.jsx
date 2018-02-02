@@ -1,12 +1,38 @@
-import React from 'react';
+import React, {Component} from 'react'
+import {graphql, compose} from 'react-apollo'
+import gql from 'graphql-tag';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
+import {withStyles} from "material-ui/styles/index";
 
 const noop = () => {};
+
+const styles = theme => ({
+  TextField: {
+    'margin': '0 15px'
+  },
+  button: {
+    margin: theme.spacing.unit,
+    'display': 'block',
+    'margin-left': 'auto',
+    'margin-right': 'auto'
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+});
 
 class LoginForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      login: true, // switch between Login and SignUp
+      FirstName: '',
       username: '',
       password: '',
     };

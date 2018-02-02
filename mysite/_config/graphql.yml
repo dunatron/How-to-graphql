@@ -23,8 +23,14 @@ SilverStripe\GraphQL\Controller:
             Friends: true
             Events: true
             Links: true
+            UsersVotes: true
         MyOrg\Model\Event:
           fields: [ID, Title, Thumbnail, Owner, BgColor, Category]
+          operations:
+            read: true
+            create: true
+        MyOrg\Model\Vote:
+          fields: [ID, Title, Created, LastEdited, VoterID, LinkID]
           operations:
             read: true
             create: true
@@ -32,8 +38,11 @@ SilverStripe\GraphQL\Controller:
           fields: [ID, Name, BgColor]
           operations: '*'
         MyOrg\Model\Link:
-          fields: [ID, Created, LastEdited, Title, description, url, Owner]
+          fields: [ID, Created, LastEdited, Title, description, url, OwnerID]
           operations: '*'
+          nestedQueries:
+            VotesOnLink:
+              paginate: false
   # Enforce HTTP basic authentication for GraphQL requests
   authenticators:
     class: SilverStripe\GraphQL\Auth\BasicAuthAuthenticator

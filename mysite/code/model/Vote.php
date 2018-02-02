@@ -9,7 +9,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
 
-class Link extends DataObject implements ScaffoldingProvider
+class Vote extends DataObject
 {
     private static $db = [
         'Title' => 'Varchar(255)',
@@ -18,11 +18,8 @@ class Link extends DataObject implements ScaffoldingProvider
     ];
 
     private static $has_one = [
-        'Owner' => AppUser::class,
-    ];
-
-    private static $has_many = [
-        'VotesOnLink' => Vote::class,
+        'Voter' => AppUser::class,
+        'Link'  => Link::class
     ];
 
     private static $default_sort = 'Created DESC';
@@ -48,30 +45,30 @@ class Link extends DataObject implements ScaffoldingProvider
         return true;
     }
 
-    public function provideGraphQLScaffolding(SchemaScaffolder $scaffolder)
-    {
-        $scaffolder
-            ->query('SingleLink', __CLASS__)
-            ->addArgs([
-                'ID' => 'ID!'
-            ])
-            ->setResolver(function ($object, array $args, $context, ResolveInfo $info) {
-                $link = self::get()->byID($args['ID']);
-                if (!$link) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Link #%s does not exist',
-                        $args['ID']
-                    ));
-                }
-                $params = [
-                    'ID' => $link->ID,
-                ];
-
-                return $link;
-            })->setUsePagination(false);
-
-        return $scaffolder;
-    }
+//    public function provideGraphQLScaffolding(SchemaScaffolder $scaffolder)
+//    {
+//        $scaffolder
+//            ->query('SingleLink', __CLASS__)
+//            ->addArgs([
+//                'ID' => 'ID!'
+//            ])
+//            ->setResolver(function ($object, array $args, $context, ResolveInfo $info) {
+//                $link = self::get()->byID($args['ID']);
+//                if (!$link) {
+//                    throw new \InvalidArgumentException(sprintf(
+//                        'Link #%s does not exist',
+//                        $args['ID']
+//                    ));
+//                }
+//                $params = [
+//                    'ID' => $link->ID,
+//                ];
+//
+//                return $link;
+//            })->setUsePagination(false);
+//
+//        return $scaffolder;
+//    }
 
 
 }
