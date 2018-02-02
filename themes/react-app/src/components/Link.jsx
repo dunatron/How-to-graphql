@@ -67,12 +67,12 @@ class Link extends Component {
 
         <div className={classes.linkBody}>
           <div className={classes.linkDescription}>
-            <div>{this.props.link.description} <span>({this.props.link.url})</span></div>
+            <div>{this.props.link.description} <span className={classes.linkURL}>({this.props.link.url})</span></div>
           </div>
 
           <div className={classes.actionsContainer}>
             <div> {this.props.link.VotesOnLink.length}votes |
-              by {this.props.link.OwnerID ? this.props.link.OwnerID : <div className={classes.linkURL}>anon</div>}</div>
+              by {this.props.link.OwnerID ? this.props.link.OwnerID : <div>anon</div>}</div>
             {timeDifferenceForDate(this.props.link.Created)}
           </div>
         </div>
