@@ -7,8 +7,8 @@ SilverStripe\GraphQL\Controller:
   cors:
     Enabled: true
     Allow-Origin: '*'
-    Allow-Headers: 'Authorization, Content-Type'
-    Allow-Methods:  'GET, POST, OPTIONS'
+    Allow-Headers: 'Origin, Authorization, Content-Type, X-Auth-Token'
+    Allow-Methods:  'GET, POST, PATCH, PUT, DELETE, OPTIONS'
     Max-Age: 86400
   schema:
     scaffolding_providers: [MyOrg\Model\Event, MyOrg\Model\Link, MyOrg\Security\AppUser]

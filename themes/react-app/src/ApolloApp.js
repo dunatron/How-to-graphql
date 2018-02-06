@@ -15,11 +15,18 @@ let GRAPHQL_ENDPOINT = SiteGraphqlConfig.getGraphqlEndPoint();
 
 const httpLink = new HttpLink({
   // uri: 'http://howtographql.d/graphql/',
-  uri: GRAPHQL_ENDPOINT,
-  opts: {
-    mode: 'no-cors',
-  },
+  //uri: GRAPHQL_ENDPOINT,
+  uri: 'http://hacker-news.whatshapp.nz/graphql/',
+  // opts: {
+  //   mode: 'no-cors',
+  // },
+  // headers: {
+  //   'Access-Control-Allow-Origin': '*',
+  //   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+  //   'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+  // }
 });
+
 const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   if (token) {
