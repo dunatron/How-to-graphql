@@ -68,7 +68,24 @@ class Link extends DataObject implements ScaffoldingProvider
                 ];
 
                 return $link;
-            })->setUsePagination(false);
+            })->setUsePagination(false)
+            ->end();
+
+        $scaffolder
+            ->query('searchAllLinks', __CLASS__)
+            ->addArgs([
+                'filter' => 'String!',
+            ])
+            ->setResolver(function ($object, array $args, $context, ResolveInfo $info) {
+                $events = self::get()->filter([
+                    'description:PartialMatch' => $args['filter'],
+                    'url:PartialMatch' => $args['filter']
+                ]);
+
+                return $events;
+            })
+            ->setUsePagination(false)
+            ->end();
 
         return $scaffolder;
     }

@@ -17,6 +17,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import SearchIcon from 'material-ui-icons/Search';
 
 import { setToken, setUserName } from '../actions/tokenActions';
 import {bindActionCreators} from "redux";
@@ -113,6 +114,13 @@ class Header extends Component {
               </Tooltip>
             </Link>
 
+            <Link to='/search' >
+              <Tooltip id="tooltip-all-links" placement="top" title="search all links">
+                <Button fab mini color="primary" aria-label="go to links">
+                  <SearchIcon />
+                </Button>
+              </Tooltip>
+            </Link>
 
             {userId && <Link to='/create' >
               <Tooltip id="tooltip-fab" placement="left"  title="create new link">

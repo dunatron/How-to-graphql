@@ -14,7 +14,8 @@ let SiteGraphqlConfig = new GraphQLConfig(BASE_URL);
 let GRAPHQL_ENDPOINT = SiteGraphqlConfig.getGraphqlEndPoint();
 
 const httpLink = new HttpLink({
-  uri: 'http://howtographql.d/graphql/',
+  // uri: 'http://howtographql.d/graphql/',
+  uri: GRAPHQL_ENDPOINT,
   opts: {
     mode: 'no-cors',
   },

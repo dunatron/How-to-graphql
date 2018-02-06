@@ -14,6 +14,7 @@ import {withStyles} from 'material-ui/styles';
 import LoginForm from './components/Login';
 import CreateLink from './components/CreateLink';
 import LinkList from './components/LinkList';
+import Search from './components/Search';
 // import { Switch, Route } from 'react-router-dom';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {withRouter} from "react-router";
@@ -72,8 +73,9 @@ class App extends Component {
         <Header/>
         <Switch>
           <Route exact path='/' component={LinkList}/>
-          <Route exact path='/login' component={LoginForm}/>
           <Route exact path='/create' component={CreateLink}/>
+          <Route exact path='/login' component={LoginForm}/>
+          <Route exact path='/search' component={Search}/>
         </Switch>
       </div>
     )
