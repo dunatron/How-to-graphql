@@ -8,6 +8,9 @@ import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import {ALL_LINKS_QUERY} from './LinkList'
 
+import SyntaxHighlighter from 'react-syntax-highlighter/prism';
+import { dark } from 'react-syntax-highlighter/styles/prism';
+
 const styles = theme => ({
   createNewsForm: {
     'padding': '20px',
@@ -37,7 +40,8 @@ class CreateLink extends Component {
     this.state = {
       title: '',
       description: '',
-      url: ''
+      url: '',
+      codeString: '(num) => num + 1'
     };
 
   }
@@ -54,6 +58,9 @@ class CreateLink extends Component {
 
     return (
       <form className={classes.createNewsForm} noValidate autoComplete="off">
+
+        <SyntaxHighlighter language='javascript' style={dark}>{this.state.codeString}</SyntaxHighlighter>
+
         <TextField
           id="CreateLink_title"
           label="title"
@@ -102,20 +109,6 @@ class CreateLink extends Component {
     }
 
     const {title, description, url} = this.state;
-    // await this.props.createLinkMutation({
-    //   variables: {
-    //     title,
-    //     description,
-    //     url,
-    //     createdById
-    //   },
-    //   refetchQueries: [
-    //     `AllLinksQuery`
-    //   ]
-    // })
-    //   .then(response => {
-    //     console.log(response)
-    //   });
 
     await this.props.createLinkMutation({
       variables: {

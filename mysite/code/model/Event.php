@@ -64,7 +64,8 @@ class Event extends DataObject implements ScaffoldingProvider
                 ];
 
                 return $event;
-            })->setUsePagination(false);
+            })->setUsePagination(false)
+            ->end();
 
         return $scaffolder;
     }

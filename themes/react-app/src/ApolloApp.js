@@ -1,18 +1,23 @@
 import React from 'react';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
+import { ApolloLink, concat, split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
-import { ApolloLink, concat } from 'apollo-link';
+
 import { connect } from 'react-redux';
 import App from './App';
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom';
 
 import GraphQLConfig from './config/GraphQLConfig';
 let BASE_URL = BASE_URL_VARIABLE;
 let SiteGraphqlConfig = new GraphQLConfig(BASE_URL);
 let GRAPHQL_ENDPOINT = SiteGraphqlConfig.getGraphqlEndPoint();
 
+// Create an http link:
 const httpLink = new HttpLink({
   // uri: 'http://howtographql.d/graphql/',
   //uri: GRAPHQL_ENDPOINT,
@@ -26,6 +31,36 @@ const httpLink = new HttpLink({
   //   'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
   // }
 });
+
+// const wsLink = new WebSocketLink({
+//   uri: `ws://localhost:4000`,
+//   options: {
+//     reconnect: true,
+//     connectionParams: {
+//       authToken: localStorage.getItem(AUTH_TOKEN),
+//     }
+//   }
+// });
+
+// Create a WebSocket link:
+const wsLink = new WebSocketLink({
+  uri: `ws://howtographql.d:5000/`,
+  options: {
+    reconnect: true
+  }
+});
+
+// using the ability to split links, you can send data to each link
+// depending on what kind of operation is being sent
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
 
 const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -41,7 +76,7 @@ const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
 });
 
 const createClient = (token) => new ApolloClient({
-  link: concat(createAuthMiddleware(token), httpLink),
+  link: concat(createAuthMiddleware(token), link),
   cache: new InMemoryCache({
     dataIdFromObject: (o) => {
       if (o.ID >= 0 && o.__typename) {
