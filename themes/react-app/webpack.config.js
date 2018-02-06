@@ -16,8 +16,8 @@ module.exports = (env = {}) => {
    * Environment variables, needed throughout the index.jsx file to determine our
    * ApolloProvider client and graphQl endpoint
    */
-  const Dev_Base_URL = 'http://192.168.50.78';
-  const Prod_Base_URL = 'http://ss4-react.whatshapp.nz';
+  const Dev_Base_URL = 'http://howtographql.d';
+  const Prod_Base_URL = 'http://hacker-news.whatshapp.nz';
   const Env_Base_URL = DOTENV.parsed.SS_BASE_URL;
 
   const BuildType = env.buildType;

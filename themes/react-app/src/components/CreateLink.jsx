@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
+import {ALL_LINKS_QUERY} from './LinkList'
 
 const styles = theme => ({
   createNewsForm: {
@@ -101,6 +102,21 @@ class CreateLink extends Component {
     }
 
     const {title, description, url} = this.state;
+    // await this.props.createLinkMutation({
+    //   variables: {
+    //     title,
+    //     description,
+    //     url,
+    //     createdById
+    //   },
+    //   refetchQueries: [
+    //     `AllLinksQuery`
+    //   ]
+    // })
+    //   .then(response => {
+    //     console.log(response)
+    //   });
+
     await this.props.createLinkMutation({
       variables: {
         title,
@@ -108,13 +124,16 @@ class CreateLink extends Component {
         url,
         createdById
       },
-      refetchQueries: [
-        `AllLinksQuery`
-      ]
-    })
-      .then(response => {
-        console.log(response)
-      });
+      update: (store, {data: {createLink}}) => {
+        const data = store.readQuery({query: ALL_LINKS_QUERY})
+        console.log(data);
+        data.readLinks.edges.splice(0,0,createLink)
+        store.writeQuery({
+          query: ALL_LINKS_QUERY,
+          data
+        })
+      }
+    });
 
     this.props.history.push(`/`)
   }

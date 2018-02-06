@@ -204,8 +204,7 @@ export default withRouter(compose(
   graphql(validateToken, {
     props: ({ data: { loading, validateToken }, client }) => ({
       loading,
-      validateToken,
-      resetOnLogout: async () => client.resetStore(),
+      validateToken
     }),
   }),
   reduxWrapper

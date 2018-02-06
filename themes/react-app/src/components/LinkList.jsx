@@ -15,11 +15,18 @@ class LinkList extends Component {
 
   _updateCacheAfterVote = (store, createVote, linkID) => {
     // 1
-    const data = store.readQuery({query: All_LINKS_QUERY});
+    const data = store.readQuery({query: ALL_LINKS_QUERY});
     // 2
     const votedLink = data.readLinks.edges.find(link => link.node.ID === linkID);
+    // votedLink.node.VotesOnLink = createVote;
+    votedLink.node.VotesOnLink.push(createVote);
     // 3
-    store.writeQuery({ query: All_LINKS_QUERY, data })
+    store.writeQuery({query: ALL_LINKS_QUERY, data})
+
+    console.group('_updateCacheAfterVote');
+    console.log('store: ', store);
+    console.log('votedLink: ', votedLink);
+    console.log('createVote: ', createVote)
   };
 
   render() {
@@ -48,7 +55,7 @@ class LinkList extends Component {
 
 }
 
-const All_LINKS_QUERY = gql`
+export const ALL_LINKS_QUERY = gql`
   query AllLinksQuery {
     readLinks {
       edges {
@@ -70,6 +77,6 @@ const All_LINKS_QUERY = gql`
 `;
 
 export default compose(
-  graphql(All_LINKS_QUERY, { name: 'allLinksQuery' }),
+  graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' }),
   withStyles(styles)
 ) (LinkList)

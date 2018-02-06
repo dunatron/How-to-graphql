@@ -8,7 +8,17 @@ import { connect } from 'react-redux';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom'
 
-const httpLink = new HttpLink({ uri: 'http://hacker-news.whatshapp.nz/graphql' });
+import GraphQLConfig from './config/GraphQLConfig';
+let BASE_URL = BASE_URL_VARIABLE;
+let SiteGraphqlConfig = new GraphQLConfig(BASE_URL);
+let GRAPHQL_ENDPOINT = SiteGraphqlConfig.getGraphqlEndPoint();
+
+const httpLink = new HttpLink({
+  uri: 'http://howtographql.d/graphql/',
+  opts: {
+    mode: 'no-cors',
+  },
+});
 const createAuthMiddleware = (token) => new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   if (token) {

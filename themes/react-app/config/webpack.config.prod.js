@@ -56,7 +56,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs],
+  entry: ['babel-polyfill', paths.appIndexJs],
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -124,7 +124,13 @@ module.exports = {
               
             },
             loader: require.resolve('eslint-loader'),
+            // loader: [
+            //   { loader: 'babel-loader' },
+            //   { loader: require.resolve('eslint-loader') }
+            // ]
           },
+          // { loader: "babel-loader", options: { "presets": ["react", "es2015", "stage-0"],
+          //     "plugins": ["transform-async-to-generator"] } },
         ],
         include: paths.appSrc,
       },
@@ -148,10 +154,6 @@ module.exports = {
             test: /\.(js|jsx)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
-            options: {
-              
-              compact: true,
-            },
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
