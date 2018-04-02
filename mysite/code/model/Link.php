@@ -96,17 +96,17 @@ class Link extends DataObject implements ScaffoldingProvider
                     'cluster' => 'ap1',
                     'encrypted' => true
                 );
-                //$pusher = new Pusher\Pusher(
-                 //   'd5536e8c56406780f1c0',
-                 //   '172a22a7a9f13384a14d',
-                  //  '501918',
-                  //  $options
-                //);
+                $pusher = new Pusher\Pusher(
+                    'd5536e8c56406780f1c0',
+                    '172a22a7a9f13384a14d',
+                    '501918',
+                    $options
+                );
 
                 $data['message'] = 'hello world';
                  $events = self::get();
 
-               // $pusher->trigger('my-channel', 'my-event', $data);
+                $pusher->trigger('my-channel', 'my-event', $data);
                 return $events;
             })
             ->setUsePagination(false)
