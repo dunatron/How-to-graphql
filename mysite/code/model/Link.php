@@ -105,7 +105,7 @@ class Link extends DataObject implements ScaffoldingProvider
 
                 $data['message'] = 'hello world';
                // $pusher->trigger('my-channel', 'my-event', $data);
-                return $data;
+                return "OK";
             })
             ->setUsePagination(false)
             ->end();
