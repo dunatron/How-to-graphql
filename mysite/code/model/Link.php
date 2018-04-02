@@ -93,18 +93,18 @@ class Link extends DataObject implements ScaffoldingProvider
             ])
             ->setResolver(function ($object, array $args, $context, ResolveInfo $info) {
                 $options = array(
-    'cluster' => 'ap1',
-    'encrypted' => true
-  );
-  $pusher = new Pusher\Pusher(
-    'd5536e8c56406780f1c0',
-    '172a22a7a9f13384a14d',
-    '501918',
-    $options
-  );
+                    'cluster' => 'ap1',
+                    'encrypted' => true
+                );
+                //$pusher = new Pusher\Pusher(
+                 //   'd5536e8c56406780f1c0',
+                 //   '172a22a7a9f13384a14d',
+                  //  '501918',
+                  //  $options
+                //);
 
-  $data['message'] = 'hello world';
-  $pusher->trigger('my-channel', 'my-event', $data);
+                $data['message'] = 'hello world';
+               // $pusher->trigger('my-channel', 'my-event', $data);
                 return $data;
             })
             ->setUsePagination(false)
